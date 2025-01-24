@@ -1,0 +1,35 @@
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+
+# Django database file
+db.sqlite3
+
+# Migrations
+checkin/migrations/
+!checkin/migrations/__init__.py  # Keep the __init__.py for migrations
+
+# Logs
+*.log
+
+# Static and media files
+staticfiles/
+media/
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Python environment files
+*.env
+*.venv
+.env.*
+.venv.*
