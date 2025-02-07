@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weekly Report</title>
+</head>
+<body>
+    <h1>Weekly Report for {{ user.username }}</h1>
+    <p>From {{ start_date }} to {{ end_date }}</p>
+    <p>Total Hours Worked: {{ total_hours }}</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Workplace</th>
+                <th>Check-in Time</th>
+                <th>Check-out Time</th>
+                <th>Hours Worked</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <td>{{ log.workplace.name }}</td>
+                <td>{{ log.check_in_time }}</td>
+                <td>{{ log.check_out_time }}</td>
+                <td>{{ log.hours_worked }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

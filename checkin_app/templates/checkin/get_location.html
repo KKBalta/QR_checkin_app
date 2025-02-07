@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Get Location</title>
+    <script>
+        function getLocationAndRedirect() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    window.location.href = `/auto/checkin/{{ workplace_id }}/?latitude=${latitude}&longitude=${longitude}`;
+                }, function(error) {
+                    alert("Geolocation is not supported by this browser or permission denied.");
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        // Automatically get location when the page loads
+        window.onload = getLocationAndRedirect;
+    </script>
+</head>
+<body>
+    <h1>Getting your location...</h1>
+</body>
+</html>

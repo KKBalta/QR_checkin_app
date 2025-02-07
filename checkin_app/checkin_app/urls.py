@@ -15,8 +15,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.auth.views import LoginView, LogoutView
+from checkin import views as checkin_views  # Import views from the checkin app
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),  # Admin panel
+    path('auto/', include('checkin.urls')),  # Routes for the checkin app
+    path('', checkin_views.redirect_to_login, name='login'),  # Home page
+
+    # Authentication views
+    path('login/', LoginView.as_view(template_name='auth/login.html'), name='login'),  # Login page
+    path('logout/', LogoutView.as_view(next_page='/login/'), name='logout'),  # Logout page
+    path('register/', checkin_views.register, name='register'),  # Registration page
 ]
+
+# Serve media files during development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
