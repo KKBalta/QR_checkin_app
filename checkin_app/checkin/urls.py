@@ -7,4 +7,6 @@ urlpatterns = [
     path('checkin/<int:workplace_id>/', views.checkin_checkout, name='checkin_checkout'),
     path('report/<int:user_id>/', views.weekly_report, name='weekly_report'),
     path('add_workplace/', views.add_workplace, name='add_workplace'),
+    path('report/', views.generate_report, name='generate_report'),
+    path('api/report/', views.api_report, name='api_report'),
 ]

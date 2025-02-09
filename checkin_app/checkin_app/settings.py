@@ -30,7 +30,6 @@ LOGIN_REDIRECT_URL = '/auto/checkin/'  # Change this to the desired URL
 
 LOGIN_URL = '/login/'  # Login page URL
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 

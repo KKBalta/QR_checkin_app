@@ -1,4 +1,5 @@
 from django.db import models
+import secrets
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from geopy.distance import geodesic
@@ -60,3 +61,13 @@ class AttendanceLog(models.Model):
 
     def __str__(self):
         return f"{self.employee.username} - {self.workplace.name}"
+    
+# API key model
+class APIKey(models.Model):
+    key = models.CharField(max_length=50, unique=True, default=secrets.token_urlsafe)
+    name = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name

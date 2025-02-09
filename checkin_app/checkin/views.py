@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.timezone import now
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db import transaction
-from .models import Workplace, AttendanceLog, User
+from .models import Workplace, AttendanceLog, User, APIKey 
 from .forms import WorkplaceForm, UserRegistrationForm
 from geopy.distance import geodesic  # To calculate distance
 from datetime import timedelta
@@ -10,6 +10,15 @@ from decimal import Decimal, ROUND_HALF_UP
 from django.contrib.auth import login
 from django.contrib import messages
 from django.urls import reverse
+from django.contrib.auth.models import Group
+from django.http import HttpResponse, JsonResponse
+from django.template.loader import render_to_string
+from weasyprint import HTML
+from django.conf import settings
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from functools import wraps
+
 
 def group_required(*group_names):
     def in_groups(user):
@@ -131,11 +140,71 @@ def weekly_report(request, user_id):
 
     return render(request, 'checkin/weekly_report.html', context)
 
+@login_required
+@group_required('Admin', 'Manager')
+def generate_report(request):
+    end_date = now().date()
+    start_date = end_date - timedelta(days=7)
+    logs = AttendanceLog.objects.filter(check_in_time__date__range=[start_date, end_date])
+
+    context = {
+        'logs': logs,
+        'start_date': start_date,
+        'end_date': end_date,
+    }
+
+    html_string = render_to_string('checkin/report.html', context)
+    html = HTML(string=html_string)
+    pdf = html.write_pdf()
+
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="report.pdf"'
+    return response
+
+def api_key_required(view_func):
+    """Decorator to check if a valid API key is provided."""
+    @wraps(view_func)
+    def _wrapped_view_func(request, *args, **kwargs):
+        api_key = request.headers.get("X-API-KEY")  # Get API key from request header
+        
+        # Check if the API key exists and is active in the database
+        if not api_key or not APIKey.objects.filter(key=api_key, is_active=True).exists():
+            return JsonResponse({"error": "Unauthorized"}, status=401)
+        
+        return view_func(request, *args, **kwargs)  # Continue with the view
+    return _wrapped_view_func
+
+@csrf_exempt
+@api_key_required
+def api_report(request):
+    end_date = now().date()
+    start_date = end_date - timedelta(days=7)
+    logs = AttendanceLog.objects.filter(check_in_time__date__range=[start_date, end_date])
+
+    data = {
+        'logs': [
+            {
+                'employee': log.employee.username,
+                'workplace': log.workplace.name,
+                'check_in_time': log.check_in_time,
+                'check_out_time': log.check_out_time,
+                'hours_worked': log.hours_worked(),
+            }
+            for log in logs
+        ],
+        'start_date': start_date,
+        'end_date': end_date,
+    }
+
+    return JsonResponse(data)
+
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            employee_group = Group.objects.get(name='Employee')
+            user.groups.add(employee_group)
             login(request, user)
             messages.success(request, 'Registration successful.')
             return redirect('login')  # Redirect to home page after successful registration
