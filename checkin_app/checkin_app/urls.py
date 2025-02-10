@@ -28,7 +28,7 @@ urlpatterns = [
 
     # Authentication views
     path('login/', LoginView.as_view(template_name='auth/login.html'), name='login'),  # Login page
-    path('logout/', LogoutView.as_view(next_page='/login/'), name='logout'),  # Logout page
+    path('logout/', LogoutView.as_view(template_name='auth/logout.html'), name='logout'),  # Logout page
     path('register/', checkin_views.register, name='register'),  # Registration page
 ]
 

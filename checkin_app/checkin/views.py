@@ -41,7 +41,7 @@ def add_workplace(request):
     return render(request, 'checkin/add_workplace.html', {'form': form})
 
 @login_required
-@group_required('Admin', 'Manager', 'Employee')
+@group_required('Admin', 'manager', 'Employee')
 def workplace_list(request):
     workplaces = Workplace.objects.all()
     return render(request, 'checkin/workplace_list.html', {'workplaces': workplaces})

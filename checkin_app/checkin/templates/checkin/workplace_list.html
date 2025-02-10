@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Workplaces</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'checkin/css/workplace_list.css' %}">
     <script>
         function getLocationAndRedirect(workplaceId) {
             if (navigator.geolocation) {
@@ -23,11 +25,15 @@
     <ul>
         {% for workplace in workplaces %}
             <li>
-                <a href="javascript:void(0);" onclick="getLocationAndRedirect({{ workplace.id }})">
+                <a href="javascript:void(0);" onclick="getLocationAndRedirect('{{ workplace.id }}')">
                     {{ workplace.name }} - {{ workplace.location }}
                 </a>
             </li>
         {% endfor %}
     </ul>
+    <form method="post" action="{% url 'logout' %}" class="logout-form">
+        {% csrf_token %}
+        <button type="submit" class="logout-button">Logout</button>
+    </form>
 </body>
 </html>
