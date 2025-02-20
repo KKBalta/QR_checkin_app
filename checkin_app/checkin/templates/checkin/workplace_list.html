@@ -10,7 +10,7 @@
                 navigator.geolocation.getCurrentPosition(function(position) {
                     const latitude = position.coords.latitude.toFixed(6);
                     const longitude = position.coords.longitude.toFixed(6);
-                    window.location.href = `/auto/checkin/${workplaceId}/?latitude=${latitude}&longitude=${longitude}`;
+                    window.location.href = `/auto/checkin/${workplaceId}/`;
                 }, function(error) {
                     alert("Geolocation is not supported by this browser or permission denied.");
                 });

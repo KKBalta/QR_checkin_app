@@ -3,12 +3,14 @@
 <head>
     <title>Get Location</title>
     <script>
-        function getLocationAndRedirect() {
+        function getLocationAndSubmit() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
-                    window.location.href = `/auto/checkin/{{ workplace_id }}/?latitude=${latitude}&longitude=${longitude}`;
+                    document.getElementById('latitude').value = latitude;
+                    document.getElementById('longitude').value = longitude;
+                    document.getElementById('locationForm').submit();
                 }, function(error) {
                     alert("Geolocation is not supported by this browser or permission denied.");
                 });
@@ -18,10 +20,15 @@
         }
 
         // Automatically get location when the page loads
-        window.onload = getLocationAndRedirect;
+        window.onload = getLocationAndSubmit;
     </script>
 </head>
 <body>
     <h1>Getting your location...</h1>
+    <form id="locationForm" method="POST" action="{% url 'checkin_checkout' workplace_id %}">
+        {% csrf_token %}
+        <input type="hidden" name="latitude" id="latitude">
+        <input type="hidden" name="longitude" id="longitude">
+    </form>
 </body>
 </html>
