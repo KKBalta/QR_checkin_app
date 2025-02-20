@@ -53,8 +53,8 @@ def checkin_checkout(request, workplace_id):
     workplace = get_object_or_404(Workplace, id=workplace_id)
 
     # Check if latitude and longitude are provided in the request
-    user_latitude = request.GET.get('latitude')
-    user_longitude = request.GET.get('longitude')
+    user_latitude = request.POST.get('latitude')
+    user_longitude = request.POST.get('longitude')
 
     if user_latitude and user_longitude:
         user_latitude = Decimal(user_latitude).quantize(Decimal('1.00000000'), rounding=ROUND_HALF_UP)
