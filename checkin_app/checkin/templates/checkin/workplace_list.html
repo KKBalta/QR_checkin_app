@@ -4,28 +4,13 @@
     <title>Workplaces</title>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'checkin/css/workplace_list.css' %}">
-    <script>
-        function getLocationAndRedirect(workplaceId) {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const latitude = position.coords.latitude.toFixed(6);
-                    const longitude = position.coords.longitude.toFixed(6);
-                    window.location.href = `/auto/checkin/${workplaceId}/`;
-                }, function(error) {
-                    alert("Geolocation is not supported by this browser or permission denied.");
-                });
-            } else {
-                alert("Geolocation is not supported by this browser.");
-            }
-        }
-    </script>
 </head>
 <body>
     <h1>Select a Workplace</h1>
     <ul>
         {% for workplace in workplaces %}
             <li>
-                <a href="javascript:void(0);" onclick="getLocationAndRedirect('{{ workplace.id }}')">
+                <a href="{% url 'checkin_checkout' workplace.id %}">
                     {{ workplace.name }} - {{ workplace.location }}
                 </a>
             </li>

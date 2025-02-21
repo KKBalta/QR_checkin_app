@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Get Location</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script>
         function getLocationAndSubmit() {
             if (navigator.geolocation) {
@@ -12,7 +14,11 @@
                     document.getElementById('longitude').value = longitude;
                     document.getElementById('locationForm').submit();
                 }, function(error) {
-                    alert("Geolocation is not supported by this browser or permission denied.");
+                    if (error.code === error.PERMISSION_DENIED) {
+                        alert("Permission denied. Please enable location services in your browser settings.");
+                    } else {
+                        alert("Geolocation is not supported by this browser or an error occurred.");
+                    }
                 });
             } else {
                 alert("Geolocation is not supported by this browser.");
@@ -23,12 +29,17 @@
         window.onload = getLocationAndSubmit;
     </script>
 </head>
-<body>
-    <h1>Getting your location...</h1>
-    <form id="locationForm" method="POST" action="{% url 'checkin_checkout' workplace_id %}">
-        {% csrf_token %}
-        <input type="hidden" name="latitude" id="latitude">
-        <input type="hidden" name="longitude" id="longitude">
-    </form>
+<body class="d-flex flex-column align-items-center justify-content-center vh-100">
+    <div class="container text-center">
+        <h1>Getting your location...</h1>
+        <form id="locationForm" method="POST" action="{% url 'checkin_checkout' workplace_id %}">
+            {% csrf_token %}
+            <input type="hidden" name="latitude" id="latitude">
+            <input type="hidden" name="longitude" id="longitude">
+        </form>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
