@@ -30,6 +30,9 @@ LOGIN_REDIRECT_URL = '/auto/checkin/'  # Change this to the desired URL
 
 LOGIN_URL = '/login/'  # Login page URL
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.ngrok-free.app",
+]
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -39,10 +42,15 @@ SECRET_KEY = 'django-insecure-#a$ys_rj34h07y7(_38mhty7p!k-7l10w3@6_xtg83#f6a^kf=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']  # Allow all hosts for development
 
 AUTH_USER_MODEL = 'checkin.User'
 
+
+# 0 12 means every day at 12 PM
+CRONJOBS = [
+    ('59 23 * * *', 'django.core.management.call_command', ['auto_checkout']),
+]
 
 # Media files configuration
 MEDIA_URL = '/media/'  # URL to access media files
@@ -58,6 +66,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'checkin',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [

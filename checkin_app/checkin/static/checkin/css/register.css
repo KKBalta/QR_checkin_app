@@ -1,81 +1,121 @@
+/* IMPORT FONT */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* COLOR VARIABLES */
+:root {
+  --primary-color: #0D1936;
+  --secondary-color: #535354;
+  --background-color: #EFEFEF;
+  --white-color: #FFF;
+  --black-color: #000;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --transition: 0.3s;
+}
+
+/* GLOBAL STYLES */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+  background-color: var(--background-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
+/* CONTAINER */
 .container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    width: 550px;
-    text-align: center;
+  width: 400px;
+  background-color: var(--white-color);
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 8px 15px var(--shadow-color);
 }
 
-h2 {
-    margin-bottom: 20px;
-    color: #333;
-    font-size: 24px;
-    font-weight: bold;
+/* HEADER */
+.container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--primary-color);
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
+/* FORM ELEMENTS */
+.container form {
+  display: flex;
+  flex-direction: column;
 }
 
-form p {
-    margin-bottom: 10px;
+.container form p {
+  margin-bottom: 15px;
 }
 
-form input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 16px;
-    transition: border-color 0.3s;
+.container form input[type="text"],
+.container form input[type="email"],
+.container form input[type="password"] {
+  width: 100%;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border: 1px solid #E3E4E6;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border var(--transition);
 }
 
-form input:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+.container form input[type="text"]:focus,
+.container form input[type="email"]:focus,
+.container form input[type="password"]:focus {
+  border-color: var(--primary-color);
+  outline: none;
 }
 
-button {
-    padding: 12px;
-    background: linear-gradient(90deg, #007bff, #0056b3);
-    color: white;
-    font-size: 18px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s;
+/* BUTTON */
+.container form button {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color var(--transition);
 }
 
-button:hover {
-    background: linear-gradient(90deg, #0056b3, #003d80);
+.container form button:hover {
+  background-color: var(--secondary-color);
 }
 
-ul {
-    list-style: none;
-    padding: 0;
+/* MESSAGES (e.g., error or success messages) */
+.container ul {
+  list-style: none;
+  margin-bottom: 20px;
+  padding: 0;
 }
 
-li.error {
-    color: red;
-    font-weight: bold;
+.container ul li {
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  border-radius: 4px;
 }
 
-li.success {
-    color: green;
-    font-weight: bold;
+/* SWITCH FORM LINK */
+.switch-form {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.switch-form a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition);
+}
+
+.switch-form a:hover {
+  color: var(--secondary-color);
 }

@@ -1,21 +1,44 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'checkin/css/login.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Ludiflex</title>
+  <!-- BOXICONS -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <!-- CSS -->
+  <link rel="stylesheet" href="{% static 'checkin/css/login.css' %}">
 </head>
 <body>
-    <div class="container">
-        <h1>Login</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Login</button>
-        </form>
-        <div class="register-link">
-            <a href="/register/">Register</a>
-        </div>
+  <div class="wrapper">
+    <div class="form-header">
+      <div class="titles">
+        <div class="title-login">Login</div>
+      </div>
     </div>
+    <!-- LOGIN FORM -->
+    <form action="{% url 'login' %}" method="post" class="login-form" autocomplete="off">
+      {% csrf_token %}
+      <div class="input-box">
+        <input type="text" name="username" class="input-field" id="log-username" required>
+        <label for="log-username" class="label">Username</label>
+        <i class="bx bx-envelope icon"></i>
+      </div>
+      <div class="input-box">
+        <input type="password" name="password" class="input-field" id="log-pass" required>
+        <label for="log-pass" class="label">Password</label>
+        <i class="bx bx-lock-alt icon"></i>
+      </div>
+      <div class="input-box">
+        <button class="btn-submit" id="SignInBtn">Sign In <i class="bx bx-log-in"></i></button>
+      </div>
+      <div class="switch-form">
+        <span>Don't have an account? <a href="{% url 'register' %}">Register</a></span>
+      </div>
+    </form>
+  </div>
+  <!-- JavaScript (if needed, otherwise remove the toggling functions) -->
+  <script src="{% static 'checkin/js/login.js' %}"></script>
 </body>
 </html>

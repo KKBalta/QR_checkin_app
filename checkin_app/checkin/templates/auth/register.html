@@ -1,25 +1,69 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Register</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'checkin/css/register.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | Ludiflex</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'checkin/css/register.css' %}">
 </head>
 <body>
-    <div class="container">
-        <h2>Register</h2>
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Register</button>
-        </form>
+  <div class="container">
+    <h2>Register</h2>
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+            {{ message }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      
+      <!-- Username Field -->
+      <p>
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        {% for error in form.username.errors %}
+          <span style="color:red;">{{ error }}</span>
+        {% endfor %}
+      </p>
+      
+      <!-- Email Field -->
+      <p>
+        {{ form.email.label_tag }}
+        {{ form.email }}
+        {% for error in form.email.errors %}
+          <span style="color:red;">{{ error }}</span>
+        {% endfor %}
+      </p>
+      
+      <!-- Password Field -->
+      <p>
+        {{ form.password1.label_tag }}
+        {{ form.password1 }}
+        {% for error in form.password1.errors %}
+          <span style="color:red;">{{ error }}</span>
+        {% endfor %}
+      </p>
+      
+      <!-- Confirm Password Field -->
+      <p>
+        {{ form.password2.label_tag }}
+        {{ form.password2 }}
+        {% for error in form.password2.errors %}
+          <span style="color:red;">{{ error }}</span>
+        {% endfor %}
+      </p>
+      
+      <button type="submit">Register</button>
+    </form>
+    
+    <div class="switch-form">
+      <span>Already have an account? <a href="{% url 'login' %}">Login</a></span>
     </div>
+  </div>
 </body>
 </html>
