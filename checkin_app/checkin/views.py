@@ -19,7 +19,6 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from functools import wraps
 
-
 def group_required(*group_names):
     def in_groups(user):
         if user.is_authenticated:
@@ -44,7 +43,12 @@ def add_workplace(request):
 @group_required('Admin', 'manager', 'Employee')
 def workplace_list(request):
     workplaces = Workplace.objects.all()
-    return render(request, 'checkin/workplace_list.html', {'workplaces': workplaces})
+    recent_logs = AttendanceLog.objects.filter(employee=request.user).order_by('-check_in_time')[:5]
+    return render(request, 'checkin/workplace_list.html', {
+        'workplaces': workplaces,
+        'recent_logs': recent_logs,
+        'is_checked_in': request.user.is_checked_in
+    })
 
 @login_required
 @group_required('Employee')
@@ -177,26 +181,36 @@ def api_key_required(view_func):
 @csrf_exempt
 @api_key_required
 def api_report(request):
-    end_date = now().date()
-    start_date = end_date - timedelta(days=7)
-    logs = AttendanceLog.objects.filter(check_in_time__date__range=[start_date, end_date])
+    try:
+        # Get days from header, default to 1 if not provided
+        days = int(request.headers.get('X-DAYS', 1))
+        if days < 1:
+            return JsonResponse({"error": "Days must be greater than 0"}, status=400)
+            
+        end_date = now().date()
+        start_date = end_date - timedelta(days=days)
+        logs = AttendanceLog.objects.filter(check_in_time__date__range=[start_date, end_date])
 
-    data = {
-        'logs': [
-            {
-                'employee': log.employee.username,
-                'workplace': log.workplace.name,
-                'check_in_time': log.check_in_time,
-                'check_out_time': log.check_out_time,
-                'hours_worked': log.hours_worked(),
-            }
-            for log in logs
-        ],
-        'start_date': start_date,
-        'end_date': end_date,
-    }
+        data = {
+            'logs': [
+                {
+                    'employee': log.employee.username,
+                    'workplace': log.workplace.name,
+                    'check_in_time': log.check_in_time,
+                    'check_out_time': log.check_out_time,
+                    'hours_worked': log.hours_worked(),
+                }
+                for log in logs
+            ],
+            'start_date': start_date,
+            'end_date': end_date,
+            'days_requested': days
+        }
 
-    return JsonResponse(data)
+        return JsonResponse(data)
+        
+    except ValueError:
+        return JsonResponse({"error": "Invalid days value"}, status=400)
 
 def register(request):
     if request.method == 'POST':

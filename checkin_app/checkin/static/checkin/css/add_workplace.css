@@ -1,65 +1,237 @@
+:root {
+    --primary-color: #0D1936;
+    --secondary-color: #535354;
+    --background-color: #EFEFEF;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --white-color: #FFF;
+    --black-color: #000;
+    --input-border-color: #E3E4E6;
+    --transition-3s: 0.3s;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    font-family: 'Geist', sans-serif;
+    background-color: var(--white-color);
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 0;
     padding: 20px;
+    min-height: 100vh;
+    box-sizing: border-box;
 }
 
 h1 {
-    color: #333;
+    font-family: 'Geist', sans-serif;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: var(--black-color);
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+.form-section {
+    width: 90%;
+    max-width: 600px;
+    background-color: var(--black-color);
+    padding: 30px;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
 }
 
 form {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 1000px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 20px;
 }
 
-form div {
+/* Style form inputs */
+form input[type="text"] {
+    width: 80%; /* Make inputs narrower */
+    padding: 15px;
+    border: 2px solid var(--white-color);
+    border-radius: 15px;
+    font-size: 16px;
+    margin-top: 8px;
+    transition: var(--transition-3s);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--white-color);
+}
+
+/* Make location textarea smaller */
+form textarea {
+    width: 80%;
+    padding: 15px;
+    border: 2px solid var(--white-color);
+    border-radius: 15px;
+    font-size: 16px;
+    margin-top: 8px;
+    transition: var(--transition-3s);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--white-color);
+    height: 80px; /* Reduced height */
+    resize: none; /* Prevent resizing */
+}
+
+/* Form paragraphs (Django form wrapper) */
+form p {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+}
+
+/* Labels */
+form label {
+    font-weight: bold;
+    color: var(--white-color);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: block;
+    text-align: center;
     width: 100%;
 }
 
+/* Submit button */
 form button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
+    padding: 15px 40px;
+    background-color: var(--white-color);
+    color: var(--black-color);
     border: none;
-    border-radius: 4px;
+    border-radius: 30px;
     cursor: pointer;
-    margin-top: 20px;
+    font-size: 16px;
+    margin-top: 30px;
+    transition: var(--transition-3s);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    align-self: center;
 }
 
 form button:hover {
-    background-color: #0056b3;
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+/* Map styles */
+.map-section {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
 #map {
     height: 400px;
     width: 100%;
-    margin-top: 20px;
-    border-radius: 8px;
+    border-radius: 30px;
 }
+
+/* Search control styles */
 .leaflet-control-geocoder {
     z-index: 1000;
-    background: white;
-    border-radius: 4px;
-    padding: 5px;
-    width: 300px;  /* Adjust width as needed */
+    background: var(--white-color);
+    border-radius: 15px;
+    padding: 10px;
+    width: 300px;
+    box-shadow: 0 0 10px var(--shadow-color);
 }
 
 .leaflet-control-geocoder input {
-    width: 100%; 
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--black-color);
+    border-radius: 15px;
+    font-size: 16px;
+    transition: var(--transition-3s);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.leaflet-control-geocoder input:focus {
+    outline: none;
+    border-color: var(--black-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Error messages */
+.errorlist {
+    color: #f44336;
+    list-style: none;
+    padding: 0;
+    margin: 5px 0;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .form-section,
+    .map-section {
+        width: 90%;
+        padding: 15px;
+        margin: 10px auto;
+    }
+
+    form input[type="text"],
+    form textarea {
+        width: 85%;
+    }
+
+    #map {
+        height: 300px;
+    }
+
+    .user-info {
+        position: relative;
+        top: 0;
+        right: 0;
+        align-items: center;
+        margin: 10px auto 20px auto;
+        width: 90%;
+    }
+}
+
+/* Add at the top of your CSS file */
+.user-info {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+.username {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: var(--black-color);
+}
+
+.email {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Responsive adjustments for user info */
+@media (max-width: 768px) {
+    .user-info {
+        position: relative;
+        top: 0;
+        right: 0;
+        align-items: center;
+        margin-bottom: 20px;
+        width: 100%;
+    }
 }

@@ -1,24 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workplaces</title>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'checkin/css/workplace_list.css' %}">
 </head>
 <body>
-    <h1>Select a Workplace</h1>
-    <ul>
-        {% for workplace in workplaces %}
-            <li>
-                <a href="{% url 'checkin_checkout' workplace.id %}">
-                    {{ workplace.name }} - {{ workplace.location }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
-    <form method="post" action="{% url 'logout' %}" class="logout-form">
-        {% csrf_token %}
-        <button type="submit" class="logout-button">Logout</button>
-    </form>
+    <header>
+        <h1>Workplaces</h1>
+        <div class="user-info">
+            <span class="username">{{ request.user.username }}</span>
+            {% if request.user.email %}
+                <span class="email">{{ request.user.email }}</span>
+            {% endif %}
+            
+            {% if not request.user.groups.all.0.name == 'Employee' %}
+                <a href="{% url 'add_workplace' %}" class="add-workplace-btn">Add Workplace</a>
+            {% endif %}
+        </div>
+    </header>
+    <div class="status {% if is_checked_in %}checked-in{% else %}checked-out{% endif %}">
+        {% if is_checked_in %}
+            <p>✅ You are currently checked in</p>
+        {% else %}
+            <p>❌ You are currently checked out</p>
+        {% endif %}
+    </div>
+    <main>
+        <ul>
+            {% for workplace in workplaces %}
+                <li>
+                    <a href="{% url 'checkin_checkout' workplace.id %}">
+                        {{ workplace.name }}
+                        <span class="address">{{ workplace.location }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="recent-activities">
+            <h2>Recent Activities</h2>
+            <table class="activities-table">
+                <thead>
+                    <tr>
+                        <th>Workplace</th>
+                        <th>Check-in Time</th>
+                        <th>Check-out Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in recent_logs %}
+                        <tr>
+                            <td>{{ log.workplace.name }}</td>
+                            <td>{{ log.check_in_time|date:"M d, Y H:i" }}</td>
+                            <td>
+                                {% if log.check_out_time %}
+                                    {{ log.check_out_time|date:"M d, Y H:i" }}
+                                {% else %}
+                                    Currently checked in
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <footer>
+        <form method="post" action="{% url 'logout' %}" class="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+    </footer>
 </body>
 </html>

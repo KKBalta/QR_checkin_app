@@ -25,3 +25,18 @@ p {
     color: #333;
     margin: 10px 0;
 }
+
+/* STYLE FOR LINK AS BUTTON */
+a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #218838; /* Button background color */
+    color: #fff; /* Text color */
+    text-decoration: none; /* Remove underline */
+    border-radius: 4px; /* Rounded corners */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+a:hover {
+    background-color: #218838; /* Darker shade on hover */
+}

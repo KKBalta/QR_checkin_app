@@ -8,6 +8,7 @@ from decimal import Decimal, ROUND_HALF_UP
 # User model
 class User(AbstractUser):
     is_checked_in = models.BooleanField(default=False)  # Add is_checked_in flag
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
 
 # Workplace model with geolocation fields
 class Workplace(models.Model):
