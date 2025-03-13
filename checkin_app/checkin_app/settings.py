@@ -16,15 +16,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Static files (CSS, JavaScript)
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']  # Global static files directory
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # Collected static files for production
-
-# Media files (e.g., uploaded QR codes)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
 # Redirect after login
 LOGIN_REDIRECT_URL = '/auto/checkin/'  # Change this to the desired URL
 
@@ -51,10 +42,6 @@ AUTH_USER_MODEL = 'checkin.User'
 CRONJOBS = [
     ('59 23 * * *', 'django.core.management.call_command', ['auto_checkout']),
 ]
-
-# Media files configuration
-MEDIA_URL = '/media/'  # URL to access media files
-MEDIA_ROOT = BASE_DIR / 'media'  # Directory where media files are stored
 
 # Application definition
 
@@ -145,7 +132,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Media files configuration
+MEDIA_URL = '/media/'  # URL to access media files
+MEDIA_ROOT = BASE_DIR / 'media'  # Directory where media files are stored
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
