@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'checkin/css/success.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>✅ {{ message }}</h1>
+        <p>Workplace: {{ workplace_name }}</p>
+        <p>Current Time: {{ current_time }}</p>
+        <form action="{% url 'logout' %}" method="post" class="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+    </div>
+</body>
+</html>

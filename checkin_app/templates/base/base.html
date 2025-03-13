@@ -1,0 +1,167 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>{% block title %}Check-In App{% endblock %}</title>
+    
+    {% load static %}
+    <!-- Metronic Core CSS -->
+    <link rel="stylesheet" href="{% static 'metronic/css/style.bundle.css' %}">
+    <link rel="stylesheet" href="{% static 'metronic/plugins/global/plugins.bundle.css' %}">
+    
+    <!-- Responsive support -->
+    <style>
+    @media (max-width: 767px) {
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        .table-responsive table {
+            min-width: 600px;
+        }
+    }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed">
+    <!-- Main container -->
+    <div class="d-flex flex-column flex-root">
+        <!-- Page -->
+        <div class="page d-flex flex-row flex-column-fluid">
+            
+            <!-- Begin::Sidebar -->
+            {% block sidebar %}
+            <div id="kt_aside" class="aside" data-kt-drawer="true" data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_mobile_toggle">
+                <div class="aside-logo flex-column-auto" id="kt_aside_logo">
+                    <!-- Logo -->
+                    <a href="{% url 'workplace_list' %}">
+                        <h3 class="h3 text-white m-0 p-5">Check-In App</h3>
+                    </a>
+                    
+                    <!-- Toggler -->
+                    <div id="kt_aside_toggle" class="btn btn-icon w-auto px-0 btn-active-color-primary aside-toggle" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="aside-minimize">
+                        <span class="svg-icon svg-icon-1 rotate-180">...</span>
+                    </div>
+                </div>
+                
+                <!-- Sidebar menu -->
+                <div class="aside-menu flex-column-fluid">
+                    <div class="hover-scroll-overlay-y my-2 py-5" id="kt_aside_menu_wrapper" data-kt-scroll="true">
+                        <div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500" id="#kt_aside_menu" data-kt-menu="true">
+                            <div class="menu-item">
+                                <a class="menu-link" href="{% url 'workplace_list' %}">
+                                    <span class="menu-icon">
+                                        <!-- Icon here -->
+                                    </span>
+                                    <span class="menu-title">Workplaces</span>
+                                </a>
+                            </div>
+                            
+                            {% if user.groups.all.0.name == 'Admin' or user.groups.all.0.name == 'manager' or user.is_superuser %}
+                            <div class="menu-item">
+                                <a class="menu-link" href="{% url 'add_workplace' %}">
+                                    <span class="menu-icon">
+                                        <!-- Icon here -->
+                                    </span>
+                                    <span class="menu-title">Add Workplace</span>
+                                </a>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="menu-item">
+                                <a class="menu-link" href="{% url 'logout' %}">
+                                    <span class="menu-icon">
+                                        <!-- Icon here -->
+                                    </span>
+                                    <span class="menu-title">Logout</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endblock %}
+            <!-- End::Sidebar -->
+            
+            <!-- Begin::Wrapper -->
+            <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+                <!-- Begin::Header -->
+                {% block header %}
+                <div id="kt_header" class="header" data-kt-sticky="true" data-kt-sticky-name="header" data-kt-sticky-offset="{default: '200px', lg: '300px'}">
+                    <div class="container-fluid d-flex flex-stack">
+                        <div class="d-flex align-items-center me-5">
+                            <!-- Mobile toggle button -->
+                            <div class="d-lg-none btn btn-icon btn-active-color-primary w-30px h-30px ms-n2 me-3" id="kt_aside_mobile_toggle">
+                                <span class="svg-icon svg-icon-2x">
+                                    <!-- SVG icon for mobile toggle -->
+                                </span>
+                            </div>
+                            
+                            <!-- Logo -->
+                            <a href="{% url 'workplace_list' %}">
+                                <h3 class="d-inline align-middle ms-1 fw-bolder fs-4">Check-In App</h3>
+                            </a>
+                        </div>
+                        
+                        <!-- User menu -->
+                        <div class="d-flex align-items-center">
+                            {% if user.is_authenticated %}
+                            <div class="d-flex align-items-center ms-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <span class="fw-bold">{{ user.get_full_name|default:user.username }}</span>
+                                    </div>
+                                    <a href="{% url 'logout' %}" class="btn btn-sm btn-light-primary">
+                                        Logout
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endblock %}
+                <!-- End::Header -->
+                
+                <!-- Begin::Content -->
+                <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                    <div class="container-xxl" id="kt_content_container">
+                        <!-- Page heading -->
+                        {% block page_heading %}{% endblock %}
+                        
+                        <!-- Main content -->
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+                <!-- End::Content -->
+                
+                <!-- Begin::Footer -->
+                {% block footer %}
+                <div class="footer py-4 d-flex flex-lg-column" id="kt_footer">
+                    <div class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-between">
+                        <div class="text-dark order-2 order-md-1">
+                            <span class="text-muted fw-bold me-1">{% now "Y" %}©</span>
+                            <a href="#" class="text-gray-800 text-hover-primary">Check-In App</a>
+                        </div>
+                    </div>
+                </div>
+                {% endblock %}
+                <!-- End::Footer -->
+            </div>
+            <!-- End::Wrapper -->
+        </div>
+    </div>
+
+    <!-- Metronic Core JS -->
+    <script src="{% static 'metronic/plugins/global/plugins.bundle.js' %}"></script>
+    <script src="{% static 'metronic/js/scripts.bundle.js' %}"></script>
+    
+    <!-- Custom JS -->
+    <script src="{% static 'js/checkin-app.js' %}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

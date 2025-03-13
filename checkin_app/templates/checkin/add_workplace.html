@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Workplace</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'checkin/css/add_workplace.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+</head>
+<body>
+    <div class="user-info">
+        <span class="username">{{ request.user.username }}</span>
+        {% if request.user.email %}
+            <span class="email">{{ request.user.email }}</span>
+        {% endif %}
+    </div>
+    <h1>Add Workplace</h1>
+    <div class="container">
+        <div class="form-section">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Save</button>
+            </form>
+        </div>
+        <div class="map-section">
+            <div id="map"></div>
+        </div>
+    </div>
+    <script>
+        var map = L.map('map').setView([51.505, -0.09], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker = L.marker([51.505, -0.09]).addTo(map);
+
+        // Update map when location input changes
+        document.getElementById('id_location').addEventListener('input', function(e) {
+            var location = e.target.value;
+            if (location) {
+                var geocoder = L.Control.Geocoder.nominatim();
+                geocoder.geocode(location, function(results) {
+                    if (results && results.length > 0) {
+                        var result = results[0];
+                        var latlng = result.center;
+                        marker.setLatLng(latlng);
+                        map.setView(latlng, 13);
+                        document.getElementById('id_latitude').value = latlng.lat.toFixed(6);
+                        document.getElementById('id_longitude').value = latlng.lng.toFixed(6);
+                    }
+                });
+            }
+        });
+
+        function onMapClick(e) {
+            var lat = e.latlng.lat.toFixed(6);
+            var lng = e.latlng.lng.toFixed(6);
+            marker.setLatLng(e.latlng);
+            document.getElementById('id_latitude').value = lat;
+            document.getElementById('id_longitude').value = lng;
+        }
+
+        map.on('click', onMapClick);
+
+        var geocoder = L.Control.geocoder({
+            defaultMarkGeocode: false
+        })
+        .on('markgeocode', function(e) {
+            var bbox = e.geocode.bbox;
+            var poly = L.polygon([
+                bbox.getSouthEast(),
+                bbox.getNorthEast(),
+                bbox.getNorthWest(),
+                bbox.getSouthWest()
+            ]).addTo(map);
+            map.fitBounds(poly.getBounds());
+            var lat = e.geocode.center.lat.toFixed(6);
+            var lng = e.geocode.center.lng.toFixed(6);
+            marker.setLatLng(e.geocode.center);
+            document.getElementById('id_latitude').value = lat;
+            document.getElementById('id_longitude').value = lng;
+        })
+        .addTo(map);
+    </script>
+</body>
+</html>
