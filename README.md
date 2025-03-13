@@ -1,5 +1,3 @@
-It looks like I couldn't retrieve the existing `README.md` file. Since you provided the content, you can copy it and create the `README.md` file manually in your repository. Here is the content you provided formatted for Markdown:
-
 # QR Check-In: Workplace Attendance Tracking System
 
 ## Overview
@@ -140,10 +138,8 @@ For production deployment:
 [MIT License](LICENSE)
 
 ## Support
-For support, contact [youremail@example.com](mailto:youremail@example.com)
+For support, contact [kaanbalta57@gmail.com](mailto:kaanbalta57@gmail.com)
 
-## Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Acknowledgements
 - Django framework
